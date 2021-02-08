@@ -16,4 +16,17 @@
 		FROM STUDENT
 		WHERE ST_ID = #{st_id}
 	</select>
+	
+	<insert id="studentInsert">
+		INSERT INTO STUDENT (ST_ID, ST_PW, ST_NAME, SCHOOL, MAJOR, GRADE) 
+		VALUES(
+				#{st_id} ,
+				#{st_pw} ,
+				#{st_name} ,
+				#{school} ,
+				#{major} ,
+				#{grade} 
+			)
+	</insert>
+	
 </mapper>

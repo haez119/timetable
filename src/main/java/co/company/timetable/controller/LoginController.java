@@ -53,14 +53,12 @@ public class LoginController {
 			return false;
 		}
 	}
-	
-	
-	
+
 	// insert 
 	@RequestMapping(value="/register")
 	@ResponseBody
 	public void register(Student student) throws IOException{
-
+		loginDao.studentInsert(student);
 	}
 	
 	

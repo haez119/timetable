@@ -23,53 +23,72 @@ appearance: none;
 
 <script>
 var idChk = '';
+var pwChk = '';
 
 $(function() {
 	
 	//로그인
 	$("#btnLogin").on('click', function() {
-	
-		$.ajax({
-			  url: '${pageContext.request.contextPath}/login' ,
-			  data : $("#frmLogin").serialize(), 
-			  success: function(data) {
-				  if(data) {
-					  alert("환영합니다.");
-					  $(location).attr('href','${pageContext.request.contextPath}/home');
-				  } else {
-					  alert("아이디 또는 비밀번호가 일치하지 않습니다.");
-				  }
-			}
-		});
+		
+		//유효성검사
+		if( $("#id").val() == null || $("#id").val() == '') {
+			alert("아이디를 입력하세요.");
+			$("#id").focus();
+		} else if ( $("#pw").val() == null || $("#pw").val() == '') {
+			alert("비밀번호를 입력하세요.");
+			$("#pw").focus();
+		} else {
+			$.ajax({
+				  url: '${pageContext.request.contextPath}/login' ,
+				  data : $("#frmLogin").serialize(), 
+				  success: function(data) {
+					  if(data) {
+						  alert("환영합니다.");
+						  $(location).attr('href','${pageContext.request.contextPath}/home');
+					  } else {
+						  alert("아이디 또는 비밀번호가 일치하지 않습니다.");
+					  }
+				}
+			});
+		}
 	});
 	
 	//중복확인
 	$("#idCheck").on('click', function() {
-		$.ajax({
-			  url: '${pageContext.request.contextPath}/idCheck' ,
-			  data : {st_id : $("#st_id").val() }, 
-			  success: function(data) {
-				idChk = data;
-				if(data) {
-					alert("사용 가능한 아이디입니다.");
-					$("#btnInsert").attr("disabled",false);
-				} else {
-					alert("중복된 아이디입니다.");
-					$("#btnInsert").attr("disabled",true);
+		var st_id = $("#st_id").val();
+		if (st_id == null || st_id == '') {
+			idChk = false;
+			$("#idCek").text("아이디를 입력하세요.").css("color","red");
+		} else {
+			$.ajax({
+				  url: '${pageContext.request.contextPath}/idCheck' ,
+				  data : {st_id : st_id }, 
+				  success: function(data) {
+					idChk = data;
+					if(data) {
+						$("#idCek").text("사용 가능한 아이디 입니다.").css("color","green");
+						$("#btnInsert").attr("disabled",false);
+					} else {
+						$("#idCek").text("중복된 아이디 입니다.").css("color","red");
+						$("#btnInsert").attr("disabled",true);
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 	
 	//비밀번호 확인
 	$("#st_pw").keyup(function(){ //비밀번호 입력할때
 		$("#pwCheck").text(""); //유효성검사창 초기화
+		pwChk=false;
 	});
 	$("#st_pw2").keyup(function(){
 		if( $("#st_pw").val() != $("#st_pw2").val() ){
 			$("#pwCheck").text("비밀번호가 일치하지 않습니다.").css("color","red");
+			pwChk=false;
 		}else{
 			$("#pwCheck").text("비밀번호가 일치합니다.").css("color","green");
+			pwChk=true;
 		}
 	});
 	
@@ -78,22 +97,38 @@ $(function() {
 	
 	// 회원가입
 	$("#btnInsert").on('click', function() {
-		//유효성검사
 		
+		//유효성검사
 		if(!idChk) {
 			alert("아이디 중복 체크를 확인하세요.");
-		} else if() {
-			
+			$("#st_id").focus();
+		} else if($("#st_name").val() == null || $("#st_name").val() == '') {
+			alert("이름을 입력하세요.");
+			$("#st_name").focus();
+		}  else if(!pwChk) {
+			alert("비밀번호를 확인하세요.");
+			$("#st_pw").focus();
+		}  else if($("#school").val() == null || $("#school").val() == '') {
+			alert("학교명을 입력하세요.");
+			$("#school").focus();
+		}  else if($("#major").val() == null || $("#major").val() == '') {
+			alert("전공을 입력하세요.");
+			$("#major").focus();
+		} else if( $("#grade option:selected").val() == null || $("#grade option:selected").val() == '') {
+			alert("재학여부 선택하세요");
+			$("#grade").focus();
+		} else {
+
+			$.ajax({
+				  url: '${pageContext.request.contextPath}/register' ,
+				  data : $("#frmRegister").serialize(), 
+				  success: function() {
+					  alert("가입되었습니다.");
+					  $(location).attr('href','${pageContext.request.contextPath}/home');
+				}
+			}); 
 		}
 
-		//insert하기
-/* 		$.ajax({
-			  url: '${pageContext.request.contextPath}/register' ,
-			  data : $("#frmRegister").serialize(), 
-			  success: function() {
-				  alert("가입되었습니다.");
-			}
-		}); */
 	});
 	
 	
@@ -119,10 +154,10 @@ $(function() {
                     <h3>LOGIN</h3>
                     <div class="row align-items-center">
                       <div class="mb-3 mb-md-4 col-md-12">
-                        <input type="text" class="form-control" placeholder="ID" name="st_id">
+                        <input type="text" class="form-control" placeholder="ID" name="st_id" id="id">
                       </div>
                       <div class="mb-3 mb-md-4 col-md-12">
-                        <input type="password" class="form-control" placeholder="PASSWORD" name="st_pw">
+                        <input type="password" class="form-control" placeholder="PASSWORD" name="st_pw" id="pw">
                         <div align="right" class="register">
                         <a data-toggle="modal" href="#registerModal" class="register">REGISTER</a>
                         </div>
@@ -158,6 +193,7 @@ $(function() {
 				<div class="form-group row">
 					<div class="col-md-8 mb-4 mb-lg-0">
 						<input type="text" class="form-control" placeholder="아이디" id="st_id" name="st_id">
+						<b id="idCek"></b>
 					</div>
 					<div class="col-md-4">
 						<input type="button" class="btn btn-primary btn-block" value="중복확인" id="idCheck"><!-- (INPUT태그 안에 넣어야지) -->
@@ -190,7 +226,7 @@ $(function() {
 					
 					<div class="col-md-4 mb-4 mb-lg-0">
 						<select name="grade" id="grade">
-							<option value="none">선택</option>
+							<option value="">선택</option>
   							<option value="입학예정">입학예정</option>
   							<option value="졸업">졸업</option>
   							<option value="재학">재학</option>
