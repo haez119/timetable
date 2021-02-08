@@ -68,7 +68,7 @@
                    </c:if>
 
                   <c:if test="${sessionScope.student.st_id ne null }" >
-                  <li class="active"><a href="index.html" class="nav-link">시간표</a></li>
+                  <li class="active"><a href="${pageContext.request.contextPath}/timeTable" class="nav-link">시간표</a></li>
                   <li><a href="testimonials.html" class="nav-link">정보게시판</a></li>
                   <li><a href="about.html" class="nav-link">자유게시판</a></li>
                   <li class="has-children">

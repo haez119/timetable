@@ -23,4 +23,10 @@ public class HomeController {
 
 		return new ModelAndView("home");
 	}
+	
+	@RequestMapping(value="/timeTable")
+	public ModelAndView timeTable(HttpServletRequest request) throws IOException{
+
+		return new ModelAndView("timetable/timeTable");
+	}
 }
