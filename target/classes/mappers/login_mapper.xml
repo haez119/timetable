@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.company.timetable.impl.LoginMapper">
+
+	<select id="login" resultType="Student">
+		SELECT ST_ID, ST_PW, ST_NAME, SCHOOL, MAJOR, GRADE, BLACK
+		FROM STUDENT
+		WHERE ST_ID = #{st_id}
+		AND ST_PW = #{st_pw}
+	</select>
+	
+	<select id="idCheck" resultType="string" parameterType="string">
+		SELECT ST_ID
+		FROM STUDENT
+		WHERE ST_ID = #{st_id}
+	</select>
+</mapper>
