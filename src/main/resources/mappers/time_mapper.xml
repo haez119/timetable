@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.company.timetable.impl.TimeMapper">
+	
+	
+	<insert id="insertSubject">
+		INSERT INTO SUBJECT(SB_ID, SB_NAME, SB_TIME) 
+		VALUES( #{sb_name} , 
+				#{sb_name} ,
+				#{sb_time}
+			   )
+	</insert>
+	
+	<insert id="insertTimeTable">
+		INSERT INTO TIMETABLE(TT_NO, ST_ID, SB_ID, WEEK, TT_TIME, COLOR, BACK_COLOR) 
+		VALUES( tb_seq.nextVal, 
+				#{st_id} ,      
+				#{sb_name} , 
+				#{week} ,
+				#{tt_time} ,
+				#{color} ,
+				#{back_color}
+		)
+	</insert>
+
+</mapper>
